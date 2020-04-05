@@ -1,0 +1,10 @@
+name: Custom API
+type: module
+description: 'Perform Operation in Site information form and Custom API generation for Page content type'
+# version: VERSION
+core: 8.x
+configure: entity.action.collection
+
+# Information added by Drupal.org packaging script on 2020-04-02
+version: '8.8.5'
+project: 'Axelerant'

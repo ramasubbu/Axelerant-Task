@@ -1,0 +1,55 @@
+<?php
+/**
+ * @file
+ * custom_info.module. 
+ * This file is used modify the Site Information form and Custom API generation for Page content type.
+ *
+ *
+ * Alter node form
+ */
+use Drupal\Core\Form\FormStateInterface;
+
+function custom_api_form_system_site_information_settings_alter(&$form, \Drupal\Core\Form\FormStateInterface $form_state, $form_id) {
+  $form['siteapikey_container'] = array(
+    '#type' => 'details',
+	'#title' => 'API Key',
+    '#weight' => 4,
+    '#attributes' => array(
+      'class' => array(
+        'siteapikey',
+      ),
+    ),
+	'#open' => 1,
+  );
+  $form['siteapikey_container']['siteapikey'] = array(
+    '#type' => 'textfield',
+	'#title' => t("Site API Key"),
+	'#attributes' => array(
+	  'placeholder' => 'No API Key yet'
+	),
+	'#default_value' => \Drupal::state()->get('siteapikey'),
+	'#required' => TRUE, 
+  );
+  $form['actions']['submit']['#value'] = t('Update Configuration');
+  $form['#validate'][] = 'custom_api_validate';
+  $form['#submit'][] = 'custom_api_submission';
+}
+
+/**
+ *  Implement custom form validate function
+ */
+function custom_api_validate(array &$form, FormStateInterface $form_state) {
+  if (strpos(trim($form_state->getValues()['siteapikey']), ' ') > 0) {
+	  $form_state->setErrorByName('siteapikey', t("Please enter the Site API Key without space."));
+  }
+}
+
+/**
+ *  Implement custom form submit function
+ */
+function custom_api_submission(array &$form, FormStateInterface $form_state) {
+  if (\Drupal::state()->get('siteapikey') != $form_state->getValues()['siteapikey']) {
+	Drupal::state()->set('siteapikey', $form_state->getValues()['siteapikey']);
+	drupal_set_message(t('Site API Key has been saved with @siteapikey.', array('@siteapikey' => $form_state->getValues()['siteapikey'])));
+  }
+}

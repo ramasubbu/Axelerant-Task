@@ -1,0 +1,11 @@
+langcode: en
+status: true
+id: custom_api
+plugin_id: custom_api
+granularity: method
+configuration:
+  GET:
+    supported_formats:
+      - json
+    supported_auth:
+      - basic_auth
